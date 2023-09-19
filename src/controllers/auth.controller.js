@@ -3,14 +3,14 @@ const bcrypt = require('bcryptjs')
 
 // Sign up user
 const signup = async (req, res) => {
-    const { UserName, Email, Password } = req.body;
-    console.log(UserName, Email,Password);
+    const { Name, UserName, Email, Password } = req.body;
+    console.log(Name ,UserName, Email,Password);
     try {
         const user = await User.findOne({ Email });
         if (user) {
             res.status(409).json({ Messege: "User already Exist!" });
         } else {
-            const user = new User({ UserName, Email, Password });
+            const user = new User({ Name, UserName, Email, Password });
             const token = await user.generateAuthToken();
             res.cookie("jwt", token, {
                 expires: new Date(Date.now() + 50000000),

@@ -11,7 +11,7 @@ require('./config/db.config.js')
 //Requiring Routers
 const userRouter = require('./api/v1/userRouter')
 const authRouter = require('./api/v1/authRouter')
-// sovik mc
+
 
 
 //Configuring middlewares
