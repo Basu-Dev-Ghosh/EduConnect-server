@@ -11,6 +11,7 @@ require('./config/db.config.js')
 //Requiring Routers
 const userRouter = require('./api/v1/userRouter')
 const authRouter = require('./api/v1/authRouter')
+const projectRouter = require('./api/v1/projectRouter')
 
 
 
@@ -26,8 +27,9 @@ app.use(express.urlencoded({ extended: true }));
 app.get('/', (req, res) => {
     res.send("Server is running")
 })
-app.use('/api/v1/user', userRouter)
 app.use('/api/v1/auth', authRouter)
+app.use('/api/v1/user', userRouter)
+app.use('/api/v1/project', projectRouter)
 
 
 

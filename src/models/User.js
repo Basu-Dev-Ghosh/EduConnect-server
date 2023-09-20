@@ -17,6 +17,11 @@ const UserSchema = new mongoose.Schema({
     Password: {
         type: String,
     },
+    Type: {
+        type: String,
+        default:'students',
+        required:true,
+    },
     tokens: [
         {
             token: {
