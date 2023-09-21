@@ -19,7 +19,6 @@ const UserSchema = new mongoose.Schema({
     Password: {
         type: String,
         minlength:6,
-        maxlength:20,
     },
     Type: {
         type: String,
@@ -48,6 +47,7 @@ UserSchema.methods.generateAuthToken = async function () {
         await this.save();
         return token;
     } catch (err) {
+        console.log(err);
         return null;
     }
 };
