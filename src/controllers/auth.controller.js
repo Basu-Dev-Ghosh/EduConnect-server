@@ -51,6 +51,7 @@ const login = async (req, res) => {
             res.status(404).json({ Messege: "User not Found" });
         }
     } catch (err) {
+        console.log(err);
         res.status(422).json({ Messege: "Something Went wrong" });
     }
 }

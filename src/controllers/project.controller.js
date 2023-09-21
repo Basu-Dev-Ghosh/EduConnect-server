@@ -18,26 +18,19 @@ oauth2Client.setCredentials({ refresh_token: REFRESH_TOKEN });
 const drive = google.drive({ version: "v3", auth: oauth2Client });
 
 // Upload a file to google drive
-async function uploadToDrive(imageMetadata, imageMedia, pdfMetadata, pdfMedia) {
+async function uploadToDrive(pdfMetadata, pdfMedia) {
   try {
-    const imageResult = await drive.files.create({
-      resource: imageMetadata,
-      media: imageMedia,
-      fields: "id",
-    });
     const pdfResult = await drive.files.create({
       resource: pdfMetadata,
       media: pdfMedia,
       fields: "id",
     });
     console.log(
-      "Files uploaded successfully. Image ID: " +
-        imageResult.data.id +
-        ", PDF ID: " +
+      "Files uploaded successfully." +
+        " PDF ID: " +
         pdfResult.data.id
     );
     return {
-      imageId: imageResult.data.id,
       pdfId: pdfResult.data.id,
     };
   } catch (err) {
@@ -59,10 +52,10 @@ async function getPublicUrl(id) {
     const result = await drive.files.get({
       fileId: id,
       fields: "webViewLink, webContentLink",
+      supportsAllDrives: true,
     });
     const publicUrl = result.data.webViewLink;
     const downloadUrl = result.data.webContentLink;
-
     return { publicUrl, downloadUrl };
   } catch (err) {
     console.error(err);
@@ -72,21 +65,15 @@ async function getPublicUrl(id) {
 
 const addProject = async (req, res) => {
   try {
-    const imageFile = req.files["image"][0];
     const pdfFile = req.files["pdf"][0];
     const data = JSON.parse(req.body.data);
+    const pic = JSON.parse(req.body.cover);
+    const Info = JSON.parse(req.body.info);
     const { Title, Description, Category, CollegeName, CollegeEmail, State } =
       data;
     const AuthorId = req.user_id;
     const { Name: AuthorName, pic: AuthorImage } = req.rootUser;
 
-    const imageMetadata = {
-      name: imageFile.originalname,
-    };
-    const imageMedia = {
-      mimeType: imageFile.mimetype,
-      body: Readable.from(Buffer.from(imageFile.buffer, "base64")),
-    };
     const fileMetadata = {
       name: pdfFile.originalname,
     };
@@ -96,18 +83,15 @@ const addProject = async (req, res) => {
     };
 
     const uploadResult = await uploadToDrive(
-      imageMetadata,
-      imageMedia,
       fileMetadata,
       fileMedia
     );
     console.log("Result: " + uploadResult);
-    const { imageId, pdfId } = uploadResult;
-    if (!imageId || !pdfId) {
+    const { pdfId } = uploadResult;
+    if ( !pdfId) {
       res.sendStatus(500);
       return;
     }
-    const { publicUrl: CoverPic } = await getPublicUrl(imageId);
     const { publicUrl: ViewLink, downloadUrl: DownloadLink } =
       await getPublicUrl(pdfId);
     const project = new Project({
@@ -117,7 +101,8 @@ const addProject = async (req, res) => {
       CollegeName,
       CollegeEmail,
       State,
-      CoverPic,
+      CoverPic:pic,
+      Info,
       DownloadLink,
       ViewLink,
       AuthorId,
@@ -132,4 +117,26 @@ const addProject = async (req, res) => {
   }
 };
 
-module.exports = { addProject };
+
+async function getAllProjects(req,res){
+    try{
+      const projets=await Project.find();
+      res.status(200).json({Messege: "Project getting Successfull", data:projets});
+    }catch(err){
+      res.status(422).json({ Messege: "Something Went Wrong" });
+    }
+}
+
+async function getProjectById(req,res){
+  const {id}=req.params;
+  try{
+    const project=await Project.findById(id);
+    console.log(project);
+    res.status(200).json({Messege: "Project getting Successfull", data:project});
+  }catch(err){
+    res.status(422).json({ Messege: "Something Went Wrong" });
+  }
+}
+
+
+module.exports = { addProject,getAllProjects,getProjectById };

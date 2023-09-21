@@ -31,6 +31,9 @@ const ProjectSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  Info: {
+    type: String,
+  },
   DownloadLink: {
     type: String,
     required: true,
