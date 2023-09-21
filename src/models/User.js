@@ -44,7 +44,7 @@ UserSchema.methods.generateAuthToken = async function () {
         await this.save();
         return token;
     } catch (err) {
-        res.status(422).json({ msg: "Jwt not set" });
+        return null;
     }
 };
 const User = new mongoose.model("User", UserSchema);
