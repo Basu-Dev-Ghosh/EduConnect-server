@@ -120,8 +120,9 @@ const addProject = async (req, res) => {
 
 async function getAllProjects(req,res){
     try{
-      const projets=await Project.find();
-      res.status(200).json({Messege: "Project getting Successfull", data:projets});
+      const projects=await Project.find();
+      console.log(projects);
+      res.status(200).json({Messege: "Project getting Successfull", data:projects});
     }catch(err){
       res.status(422).json({ Messege: "Something Went Wrong" });
     }
@@ -136,6 +137,15 @@ async function getProjectById(req,res){
     res.status(422).json({ Messege: "Something Went Wrong" });
   }
 }
+async function getProjectByCollegeEmail(req,res){
+  const {email}=req.params;
+  try{
+    const projects=await Project.find({CollegeEmail:email});
+    res.status(200).json({Messege: "Projects getting Successfull", data:projects});
+  }catch(err){
+    res.status(422).json({ Messege: "Something Went Wrong" });
+  }
+}
 
 
-module.exports = { addProject,getAllProjects,getProjectById };
+module.exports = { addProject,getAllProjects,getProjectById,getProjectByCollegeEmail };
