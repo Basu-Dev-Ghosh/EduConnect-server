@@ -1,8 +1,10 @@
 const express = require("express");
 const router = express.Router();
-const { getUser } = require('../../controllers/user.controller');
+const { getUser,edit } = require('../../controllers/user.controller');
+const auth = require("../../middlewares/Auth");
 
 router.get('/:id', getUser)
+router.post('/edit',auth, edit)
 
 
 
