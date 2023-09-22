@@ -30,4 +30,15 @@ const edit = async (req, res) => {
   }
 };
 
-module.exports = { getUser, edit };
+async function getUsersByCollegeEmail(req,res){
+    const {email}=req.params;
+    try{
+      const users=await User.find({CollegeEmail:email});
+    //   console.log(users);
+      res.status(200).json({Messege: "Projects getting Successfull", data:users});
+    }catch(err){
+      res.status(422).json({ Messege: "Something Went Wrong" });
+    }
+  }
+
+module.exports = { getUser, edit,getUsersByCollegeEmail };

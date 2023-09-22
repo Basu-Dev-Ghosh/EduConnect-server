@@ -1,10 +1,11 @@
 const express = require("express");
 const router = express.Router();
-const { getUser,edit } = require('../../controllers/user.controller');
+const { getUser,edit, getUsersByCollegeEmail } = require('../../controllers/user.controller');
 const auth = require("../../middlewares/Auth");
-
+const auth2 = require("../../middlewares/Auth2");
 router.get('/:id', getUser)
 router.post('/edit',auth, edit)
+router.get('/college/:email',auth2, getUsersByCollegeEmail)
 
 
 

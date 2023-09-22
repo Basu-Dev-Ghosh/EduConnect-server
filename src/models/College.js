@@ -54,7 +54,7 @@ const CollegeSchema = new mongoose.Schema({
       },
     },
   ],
-});
+},  { timestamps: true });
 CollegeSchema.pre("save", async function (next) {
   if (this.isModified("Password")) {
     this.Password = await bcrypt.hash(this.Password, 12);

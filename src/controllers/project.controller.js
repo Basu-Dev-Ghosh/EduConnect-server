@@ -141,6 +141,7 @@ async function getProjectByCollegeEmail(req,res){
   const {email}=req.params;
   try{
     const projects=await Project.find({CollegeEmail:email});
+    // console.log(projects);
     res.status(200).json({Messege: "Projects getting Successfull", data:projects});
   }catch(err){
     res.status(422).json({ Messege: "Something Went Wrong" });

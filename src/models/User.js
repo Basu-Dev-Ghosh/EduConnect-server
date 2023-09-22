@@ -25,6 +25,9 @@ const UserSchema = new mongoose.Schema({
     type: String,
     default: "",
   },
+  CollegeEmail: {
+    type: String,
+  },
   Bio: {
     type: String,
     default: "",
@@ -54,7 +57,9 @@ const UserSchema = new mongoose.Schema({
       },
     },
   ],
-});
+},{ timestamps: true });
+
+
 UserSchema.pre("save", async function (next) {
   if (this.isModified("Password")) {
     this.Password = await bcrypt.hash(this.Password, 12);
