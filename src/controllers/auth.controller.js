@@ -9,6 +9,7 @@ const signup = async (req, res) => {
 
     console.log(req.body);
     const { Name, UserName, Email, Password,Type ,Pic,Address} = req.body;
+    console.log(req.body);
     if(Type === "student"){
         try {
             
@@ -28,10 +29,15 @@ const signup = async (req, res) => {
                 res.status(201).json({ Messege: "Registration Successfull", user });
             }
         } catch (err) {
+            console.log(err);
+            if(err.code ===11000){
+
+                res.status(422).json({ Messege: "User name exist" }); 
+            }
             res.status(422).json({ Messege: "Something Went Wrong" });
         }
     }
-    else{
+    else if(Type === 'college'){
         try {
             const college = await College.findOne({ CollegeEmail:Email });
             if (college) {
@@ -63,6 +69,7 @@ const signup = async (req, res) => {
 // Login user
 const login = async (req, res) => {
     const { UserName, Password,Type } = req.body;
+    console.log(Type);
     if(Type==="student"){
         try {
             const user = await User.findOne({ UserName });
@@ -89,9 +96,9 @@ const login = async (req, res) => {
             res.status(422).json({ Messege: "Something Went wrong" });
         }
     }
-        else{
+        else if(Type === "college"){
             try {
-                const college = await User.findOne({ CollegeEmail:UserName });
+                const college = await College.findOne({ CollegeEmail:UserName });
                 if (college) {
                     const bool = await bcrypt.compare(Password, college.Password);
                     if (!bool) {
@@ -105,10 +112,10 @@ const login = async (req, res) => {
                             secure: true,
                             httpOnly: true,
                         });
-                        res.status(202).json({ Messege: "Log in succesfull", user });
+                        res.status(202).json({ Messege: "Log in succesfull", user:college });
                     }
                 } else {
-                    res.status(404).json({ Messege: "User not Found" });
+                    res.status(404).json({ Messege: "College not Found" });
                 }
             } catch (err) {
                 console.log(err);

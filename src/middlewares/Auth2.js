@@ -1,14 +1,13 @@
 const jwt = require("jsonwebtoken");
-const User = require('../models/User')
+const College = require('../models/College')
 
 
-const auth = async (req, res, next) => {
-    
+const auth2 = async (req, res, next) => {
     try {
         const token = req.cookies.jwt;
         if (token) {
             const verifyUser = jwt.verify(token, process.env.SECRET_KEY);
-            const rootUser = await User.findOne({ _id: verifyUser._id });
+            const rootUser = await College.findOne({ _id: verifyUser._id });
             req.user_id = rootUser._id;
             req.rootUser = rootUser;
             req.token = token;
@@ -23,4 +22,4 @@ const auth = async (req, res, next) => {
     }
 };
 
-module.exports = auth;
+module.exports = auth2;
