@@ -11,7 +11,7 @@ const auth = async (req, res, next) => {
             req.user_id = rootUser._id;
             req.rootUser = rootUser;
             req.token = token;
-            console.log("Basu",token)
+            // console.log("Basu",token)
             next();
         } else {
             res.status(422).json({ msg: "JWT not verified" });
