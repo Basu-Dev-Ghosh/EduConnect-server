@@ -10,7 +10,7 @@ const upload = multer({ storage: storage });
 router.get('/',getAllProjects)
 router.get('/:id',getProjectById)
 router.get('/college/:email',auth2,getProjectByCollegeEmail)
-router.post("/new", auth, upload.fields([{ name: 'image' }, { name: 'pdf' }]), addProject);
+router.post("/new", auth, addProject);
 router.get('/approve/:id',auth2,approveProject)
 router.get('/reject/:id',auth2,rejectProject)
 

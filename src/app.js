@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require("express");
 const app = express();
 const cors = require("cors");
+const fileUpload = require('express-fileupload');
 const cookieParser = require("cookie-parser");
 const port = process.env.PORT || 4000;
 // Requiring Database connection
@@ -17,6 +18,7 @@ const collegeRouter = require('./api/v1/collegeRouter')
 
 
 //Configuring middlewares
+app.use(fileUpload());
 app.use(cors({ origin: true, credentials: true }));
 app.use(cookieParser());
 app.use(express.json());

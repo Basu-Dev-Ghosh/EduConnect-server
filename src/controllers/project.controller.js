@@ -65,7 +65,8 @@ async function getPublicUrl(id) {
 
 const addProject = async (req, res) => {
   try {
-    const pdfFile = req.files["pdf"][0];
+    const pdfFile = req.files.file;
+    console.log(pdfFile);
     const data = JSON.parse(req.body.data);
     const pic = JSON.parse(req.body.cover);
     const Info = JSON.parse(req.body.info);
@@ -75,11 +76,11 @@ const addProject = async (req, res) => {
     const { Name: AuthorName, pic: AuthorImage } = req.rootUser;
 
     const fileMetadata = {
-      name: pdfFile.originalname,
+      name: pdfFile.name,
     };
     const fileMedia = {
       mimeType: pdfFile.mimetype,
-      body: Readable.from(Buffer.from(pdfFile.buffer, "base64")),
+      body: Readable.from(Buffer.from(pdfFile.data, "base64")),
     };
 
     const uploadResult = await uploadToDrive(
