@@ -57,7 +57,7 @@ const ProjectSchema = new mongoose.Schema({
   AuthorImage: {
     type: String,
   },
-},{ timestamps: true });
+});
 
 const Project = new mongoose.model("Project", ProjectSchema);
 module.exports = Project;

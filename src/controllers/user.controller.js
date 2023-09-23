@@ -15,11 +15,20 @@ const getUser = async (req, res) => {
 };
 
 const edit = async (req, res) => {
-    console.log("hi");
-  const { Pic, Name, UserName, Address, CollegeName, Bio } = req.body;
-  console.log(Pic, Name, UserName, Address, CollegeName, Bio );
+  console.log("hi");
+  const { Pic, Name, UserName, Address, CollegeName, CollegeEmail, Bio } =
+    req.body;
+  console.log(Pic, Name, UserName, Address, CollegeName, Bio);
   try {
-    const user = await User.findByIdAndUpdate(req.user_id, { Pic, Name, UserName, Address, CollegeName, Bio } )
+    const user = await User.findByIdAndUpdate(req.user_id, {
+      Pic,
+      Name,
+      UserName,
+      Address,
+      CollegeName,
+      CollegeEmail,
+      Bio,
+    });
     if (user) {
       res.status(200).json({ Messege: "User Updated", user });
     } else {
@@ -30,15 +39,17 @@ const edit = async (req, res) => {
   }
 };
 
-async function getUsersByCollegeEmail(req,res){
-    const {email}=req.params;
-    try{
-      const users=await User.find({CollegeEmail:email});
+async function getUsersByCollegeEmail(req, res) {
+  const { email } = req.params;
+  try {
+    const users = await User.find({ CollegeEmail: email });
     //   console.log(users);
-      res.status(200).json({Messege: "Projects getting Successfull", data:users});
-    }catch(err){
-      res.status(422).json({ Messege: "Something Went Wrong" });
-    }
+    res
+      .status(200)
+      .json({ Messege: "Projects getting Successfull", data: users });
+  } catch (err) {
+    res.status(422).json({ Messege: "Something Went Wrong" });
   }
+}
 
-module.exports = { getUser, edit,getUsersByCollegeEmail };
+module.exports = { getUser, edit, getUsersByCollegeEmail };

@@ -148,5 +148,36 @@ async function getProjectByCollegeEmail(req,res){
   }
 }
 
+async function approveProject(req,res){
+  
+    const {id}=req.params;
+    try{
+      const project = await Project.findByIdAndUpdate(id, { Status:'public' } )
+      if (project) {
+        res.status(200).json({ Messege: "Project Approved", data:project });
+      } else {
+        res.status(404).json({ Messege: "Project not approved" });
+      }
+    }catch(err){
+      res.status(422).json({Messege: "Something Went Wrong"})
+    }
 
-module.exports = { addProject,getAllProjects,getProjectById,getProjectByCollegeEmail };
+}
+async function rejectProject(req,res){
+  
+    const {id}=req.params;
+    try{
+      const project = await Project.findByIdAndDelete(id )
+      if (project) {
+        res.status(200).json({ Messege: "Project Deleted"});
+      } else {
+        res.status(404).json({ Messege: "Project not rejected" });
+      }
+    }catch(err){
+      res.status(422).json({Messege: "Something Went Wrong"})
+    }
+
+}
+
+
+module.exports = { addProject,getAllProjects,getProjectById,getProjectByCollegeEmail,approveProject ,rejectProject};
