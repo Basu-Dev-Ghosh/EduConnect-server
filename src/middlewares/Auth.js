@@ -16,11 +16,12 @@ const auth = async (req, res, next) => {
         } else {
             res.status(422).json({ msg: "JWT not verified" });
         }
-
-
+        
+        
     } catch (err) {
         res.status(422).json({ msg: "JWT not verified" });
     }
+    next()
 };
 
 module.exports = auth;

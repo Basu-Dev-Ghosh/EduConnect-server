@@ -12,6 +12,7 @@ require('./config/db.config.js')
 const userRouter = require('./api/v1/userRouter')
 const authRouter = require('./api/v1/authRouter')
 const projectRouter = require('./api/v1/projectRouter')
+const collegeRouter = require('./api/v1/collegeRouter')
 
 
 
@@ -30,6 +31,7 @@ app.get('/', (req, res) => {
 app.use('/api/v1/auth', authRouter)
 app.use('/api/v1/user', userRouter)
 app.use('/api/v1/project', projectRouter)
+app.use('/api/v1/college', collegeRouter)
 
 
 

@@ -52,4 +52,6 @@ async function getUsersByCollegeEmail(req, res) {
   }
 }
 
+
+
 module.exports = { getUser, edit, getUsersByCollegeEmail };

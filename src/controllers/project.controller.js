@@ -121,7 +121,7 @@ const addProject = async (req, res) => {
 async function getAllProjects(req,res){
     try{
       const projects=await Project.find();
-      console.log(projects);
+      // console.log(projects);
       res.status(200).json({Messege: "Project getting Successfull", data:projects});
     }catch(err){
       res.status(422).json({ Messege: "Something Went Wrong" });
