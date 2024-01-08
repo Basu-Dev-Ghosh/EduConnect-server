@@ -26,10 +26,9 @@ async function uploadToDrive(pdfMetadata, pdfMedia) {
       fields: "id",
     });
     console.log(
-      "Files uploaded successfully." +
-        " PDF ID: " +
-        pdfResult.data.id
+      "Files uploaded successfully." + " PDF ID: " + pdfResult.data.id
     );
+    console.log(pdfResult);
     return {
       pdfId: pdfResult.data.id,
     };
@@ -66,7 +65,8 @@ async function getPublicUrl(id) {
 const addProject = async (req, res) => {
   try {
     const pdfFile = req.files.file;
-    console.log(pdfFile);
+
+    // console.log(pdfFile);
     const data = JSON.parse(req.body.data);
     const pic = JSON.parse(req.body.cover);
     const Info = JSON.parse(req.body.info);
@@ -83,13 +83,10 @@ const addProject = async (req, res) => {
       body: Readable.from(Buffer.from(pdfFile.data, "base64")),
     };
 
-    const uploadResult = await uploadToDrive(
-      fileMetadata,
-      fileMedia
-    );
+    const uploadResult = await uploadToDrive(fileMetadata, fileMedia);
     console.log("Result: " + uploadResult);
     const { pdfId } = uploadResult;
-    if ( !pdfId) {
+    if (!pdfId) {
       res.sendStatus(500);
       return;
     }
@@ -102,7 +99,7 @@ const addProject = async (req, res) => {
       CollegeName,
       CollegeEmail,
       State,
-      CoverPic:pic,
+      CoverPic: pic,
       Info,
       DownloadLink,
       ViewLink,
@@ -118,67 +115,74 @@ const addProject = async (req, res) => {
   }
 };
 
-
-async function getAllProjects(req,res){
-    try{
-      const projects=await Project.find();
-      // console.log(projects);
-      res.status(200).json({Messege: "Project getting Successfull", data:projects});
-    }catch(err){
-      res.status(422).json({ Messege: "Something Went Wrong" });
-    }
-}
-
-async function getProjectById(req,res){
-  const {id}=req.params;
-  try{
-    const project=await Project.findById(id);
-    res.status(200).json({Messege: "Project getting Successfull", data:project});
-  }catch(err){
-    res.status(422).json({ Messege: "Something Went Wrong" });
-  }
-}
-async function getProjectByCollegeEmail(req,res){
-  const {email}=req.params;
-  try{
-    const projects=await Project.find({CollegeEmail:email});
+async function getAllProjects(req, res) {
+  try {
+    const projects = await Project.find();
     // console.log(projects);
-    res.status(200).json({Messege: "Projects getting Successfull", data:projects});
-  }catch(err){
+    res
+      .status(200)
+      .json({ Messege: "Project getting Successfull", data: projects });
+  } catch (err) {
     res.status(422).json({ Messege: "Something Went Wrong" });
   }
 }
 
-async function approveProject(req,res){
-  
-    const {id}=req.params;
-    try{
-      const project = await Project.findByIdAndUpdate(id, { Status:'public' } )
-      if (project) {
-        res.status(200).json({ Messege: "Project Approved", data:project });
-      } else {
-        res.status(404).json({ Messege: "Project not approved" });
-      }
-    }catch(err){
-      res.status(422).json({Messege: "Something Went Wrong"})
-    }
-
+async function getProjectById(req, res) {
+  const { id } = req.params;
+  try {
+    const project = await Project.findById(id);
+    res
+      .status(200)
+      .json({ Messege: "Project getting Successfull", data: project });
+  } catch (err) {
+    res.status(422).json({ Messege: "Something Went Wrong" });
+  }
 }
-async function rejectProject(req,res){
-  
-    const {id}=req.params;
-    try{
-      const project = await Project.findByIdAndDelete(id )
-      if (project) {
-        res.status(200).json({ Messege: "Project Deleted"});
-      } else {
-        res.status(404).json({ Messege: "Project not rejected" });
-      }
-    }catch(err){
-      res.status(422).json({Messege: "Something Went Wrong"})
-    }
-
+async function getProjectByCollegeEmail(req, res) {
+  const { email } = req.params;
+  try {
+    const projects = await Project.find({ CollegeEmail: email });
+    // console.log(projects);
+    res
+      .status(200)
+      .json({ Messege: "Projects getting Successfull", data: projects });
+  } catch (err) {
+    res.status(422).json({ Messege: "Something Went Wrong" });
+  }
 }
 
+async function approveProject(req, res) {
+  const { id } = req.params;
+  try {
+    const project = await Project.findByIdAndUpdate(id, { Status: "public" });
+    if (project) {
+      res.status(200).json({ Messege: "Project Approved", data: project });
+    } else {
+      res.status(404).json({ Messege: "Project not approved" });
+    }
+  } catch (err) {
+    res.status(422).json({ Messege: "Something Went Wrong" });
+  }
+}
+async function rejectProject(req, res) {
+  const { id } = req.params;
+  try {
+    const project = await Project.findByIdAndDelete(id);
+    if (project) {
+      res.status(200).json({ Messege: "Project Deleted" });
+    } else {
+      res.status(404).json({ Messege: "Project not rejected" });
+    }
+  } catch (err) {
+    res.status(422).json({ Messege: "Something Went Wrong" });
+  }
+}
 
-module.exports = { addProject,getAllProjects,getProjectById,getProjectByCollegeEmail,approveProject ,rejectProject};
+module.exports = {
+  addProject,
+  getAllProjects,
+  getProjectById,
+  getProjectByCollegeEmail,
+  approveProject,
+  rejectProject,
+};
